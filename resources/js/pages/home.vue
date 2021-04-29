@@ -15,33 +15,45 @@
         </div>
       </div>
     </form>
+    <div class="w-25">
+      <div v-for="todo in todos" :key="todo.id" class="w-100">{{todo.title}}</div>
+    </div>
   </card>
 </template>
 
 <script>
 import Form from '../Form'
 
-window.axios = require('axios');
-
+window.axios = require('axios')
 
 export default {
   middleware: 'auth',
 
   data () {
     return {
+      todos:'',
       form: new Form({
         title: ''
       })
     }
   },
-  mounted () {
-  },
   methods: {
+    getTodos(){
+      axios.get('/api/todo').then((res) => {
+        this.todos = res.data
+      }).catch((error) => {
+        console.log(error)
+      })
+    },
     saveData () {
       const data = new FormData()
       data.append('title', this.form.title)
-      axios.post('/api/todo',data)
+      axios.post('/api/todo', data)
     }
+  },
+
+  mounted() {
+    this.getTodos()
   },
 
   metaInfo () {
