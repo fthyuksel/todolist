@@ -106,6 +106,15 @@
       }
     },
     methods: {
+      deleteTodo(e){
+        const data = new FormData();
+        data.append('_method','DELETE')
+        axios.post('/api/todo/'+e.id, data).then((res) => {
+          this.todos = res.data
+        }).catch((error) => {
+          this.form.errors.record(error.response.data.errors)
+        })
+      },
       updateTodo(e){
         if (e.title != ''){
           this.editmode = false;
