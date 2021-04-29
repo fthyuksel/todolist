@@ -122,6 +122,7 @@
         e.completed = !e.completed
         const data = new FormData();
         data.append('_method','PATCH')
+        data.append('title', e.title)
         if (e.completed == true){
           data.append('completed', 1);
         }
