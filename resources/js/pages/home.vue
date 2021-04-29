@@ -1,10 +1,20 @@
 <template>
+
+
+
   <card>
+
+
     <div class="w-100 h-100 d-flex flex-column justify-content-center align-items-center">
       <h1 class="text-black-50 display-6">
         To Do List
       </h1>
     </div>
+
+    <div class="bg-danger w-100 mb-3 justify-content-center align-items-center">
+      <span class="text-white pt-3 pb-3 mt-3 mb-3 ml-3 display-4" v-if="form.errors.has('title')" v-text="form.errors.get('title')"></span>
+    </div>
+
     <form @submit.prevent="saveData">
       <div class="input-group mb-3">
         <input v-model="form.title" :class="{'is-invalid' : form.errors.has('title')}" type="text"
@@ -17,9 +27,9 @@
           </button>
         </div>
       </div>
-      <span class="text-danger pt-3 pb-3" v-if="form.errors.has('title')" v-text="form.errors.get('title')"></span>
+
     </form>
-    <div class="w-100">
+    <div class="w-100 todo">
       <div v-for="todo in todos" :key="todo.id" class="w-100 d-flex align-items-center p3 bg-white border-bottom">
         <span class="mr-2">
           <svg v-on:click="toogleTodo(todo)" v-if="todo.completed == false" xmlns="http://www.w3.org/2000/svg"
@@ -37,14 +47,14 @@
           <path d="M9 12l2 2l4 -4"/>
           </svg>
         </span>
-        <div class="font-weight-bolder"><span
-          v-if="editmode == false || editmode != todo.id">{{todo.title}}</span><input v-if="editmode == todo.id"
-          v-model="todo.title" type="text">
+
+        <div class="font-weight-bolder w-100"><span v-if="editmode == false || editmode != todo.id">{{todo.title}}</span>
+          <input @keydown="form.errors.clear('title')" class="w-100" v-if="editmode == todo.id" v-model="todo.title" type="text">
         </div>
 
         <div class="ml-auto mr-2 d-flex align-items-center">
           <span>
-            <svg v-on:click="editmode == todo.id" v-if="editmode != todo.id" xmlns="http://www.w3.org/2000/svg"
+            <svg v-on:click="editmode = todo.id" v-if="editmode != todo.id" xmlns="http://www.w3.org/2000/svg"
                  class="icon icon-tabler icon-tabler-edit" width="36" height="36" viewBox="0 0 24 24" stroke-width="1.5"
                  stroke="#fd0061" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
@@ -96,6 +106,18 @@
       }
     },
     methods: {
+      updateTodo(e){
+        if (e.title != ''){
+          this.editmode = false;
+        }
+        const data = new FormData();
+        data.append('_method','PATCH')
+        data.append('title', e.title)
+        axios.post('/api/todo/'+e.id, data).then(() => {})
+          .catch((error) => {
+            this.form.errors.record(error.response.data.errors)
+          })
+      },
       toogleTodo(e){
         e.completed = !e.completed
         const data = new FormData();

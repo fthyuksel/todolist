@@ -75,6 +75,13 @@ class TodoController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $this->validate($request,[
+            'title' => 'required'
+        ],
+        [
+            'title.required' => 'Todo input field is required!'
+        ]);
+
         $todo = Todo::findOrFail($id);
         $todo->update($request->all());
         $todo->save();
