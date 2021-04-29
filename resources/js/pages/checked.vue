@@ -102,7 +102,6 @@
           data.append('completed', 0);
         }
         axios.post('/api/todo/' + e.id, data)
-        this.getTodos()
       },
       getTodos() {
         axios.get('/api/todo').then((res) => {
@@ -118,7 +117,7 @@
     },
 
     metaInfo() {
-      return {title: this.$t('home')}
+      return {title: this.$t('Checked List')}
     }
   }
 </script>

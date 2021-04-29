@@ -3,7 +3,7 @@
     <div class="top-right links">
       <template v-if="authenticated">
         <router-link :to="{ name: 'home' }">
-          {{ $t('home') }}
+          ToDoapp
         </router-link>
       </template>
       <template v-else>
@@ -22,7 +22,7 @@
       </div>
 
       <div class="links">
-        <a href="#">GITHUB</a>
+        <a target="_blank" href="https://github.com/fthyuksel/todolist">GITHUB</a>
       </div>
     </div>
   </div>

@@ -2,7 +2,7 @@
   <nav class="navbar navbar-expand-lg navbar-light bg-white">
     <div class="container">
       <router-link :to="{ name: user ? 'home' : 'welcome' }" class="navbar-brand">
-        {{ appName }}
+        ToDo List
       </router-link>
       <span class="mr-3"> | </span>
       <router-link :to="{ name: user ? 'checked' : 'welcome' }" class="navbar-brand">
