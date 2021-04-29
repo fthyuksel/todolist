@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Todo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TodoController extends Controller
 {
@@ -14,7 +15,9 @@ class TodoController extends Controller
      */
     public function index()
     {
-        return Todo::latest()->get();
+        $user_id = Auth::user()->id;
+        return Todo::latest()->where('user_id',$user_id)->get();
+
     }
 
     /**
@@ -41,7 +44,9 @@ class TodoController extends Controller
         [
             'title.required' => 'Todo input field is required!'
         ]);
-        Todo::create($request->all());
+        $user_id = Auth::user()->id;
+        Todo::create($request->all() + ['user_id' => $user_id]);
+
     }
 
     /**
@@ -85,6 +90,7 @@ class TodoController extends Controller
         $todo = Todo::findOrFail($id);
         $todo->update($request->all());
         $todo->save();
+
     }
 
     /**
@@ -97,6 +103,7 @@ class TodoController extends Controller
     {
         $todo = Todo::findOrFail($id);
         $todo->delete();
-        return Todo::latest()->get();
+        $user_id = Auth::user()->id;
+        return Todo::latest()->where('user_id',$user_id)->get();
     }
 }
