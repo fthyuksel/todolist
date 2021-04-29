@@ -35,6 +35,12 @@ class TodoController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request,[
+            'title' => 'required'
+        ],
+        [
+            'title.required' => 'Todo input field is required!'
+        ]);
         Todo::create($request->all());
     }
 
