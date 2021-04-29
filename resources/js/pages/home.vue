@@ -88,6 +88,7 @@
 
     data() {
       return {
+        editmode: false,
         todos: '',
         form: new Form({
           title: ''
@@ -95,6 +96,18 @@
       }
     },
     methods: {
+      toogleTodo(e){
+        e.completed = !e.completed
+        const data = new FormData();
+        data.append('_method','PATCH')
+        if (e.completed == true){
+          data.append('completed', 1);
+        }
+        if (e.completed == false){
+          data.append('completed', 0);
+        }
+        axios.post('/api/todo/'+e.id, data)
+      },
       getTodos() {
         axios.get('/api/todo').then((res) => {
           this.todos = res.data
